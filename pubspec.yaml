@@ -1,0 +1,25 @@
+name: apk_file_manager
+description: "A simple, ad-free file manager for Android"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  path_provider: ^2.1.4
+  permission_handler: ^11.3.1
+  file_picker: ^8.0.7
+  path: ^1.9.0
+  mime: ^1.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
