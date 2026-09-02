@@ -91,3 +91,9 @@ windows/flutter/generated_plugins.cmake
 *.orig
 *.log
 *.patch
+/android/
+/ios/
+/windows/
+/macos/
+/linux/
+/web/

@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:open_file/open_file.dart';
 
 class FileItem {
   final String name;
@@ -226,9 +227,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _openFile(FileItem item) async {
     try {
-      await Process.run('xdg-open', [item.path]);
+      final result = await OpenFile.open(item.path);
+      if (result.type != ResultType.done) {
+        _showError('Tidak bisa buka file: ${result.message}');
+      }
     } catch (e) {
-      _showError('Tidak bisa buka file');
+      _showError('Tidak bisa buka file: $e');
     }
   }
 
