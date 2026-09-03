@@ -17,6 +17,12 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Generate Android project
+        run: flutter create . --platforms=android
+
+      - name: Copy custom Android files
+        run: cp -r android_custom/* android/
+
       - name: Get dependencies
         run: flutter pub get
 
