@@ -1,34 +1,43 @@
-name: Build APK
+name: Build Flutter APK
+
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
   build:
+    name: Build APK
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.0'
+          flutter-version: '3.47.0'
           channel: 'stable'
           cache: true
 
-      - name: Create Android project
+      - name: Generate Android project
         run: flutter create . --platforms=android
 
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Build APK
+      - name: Build APK (release)
         run: flutter build apk --release
 
-      - name: Upload artifact
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: apk-file-manager
           path: build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
+
+      - name: Show APK info
+        run: |
+          ls -lh build/app/outputs/flutter-apk/app-release.apk
+          echo "APK size: $(du -h build/app/outputs/flutter-apk/app-release.apk | cut -f1)"
