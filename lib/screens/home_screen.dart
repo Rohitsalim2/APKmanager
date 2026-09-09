@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (name.startsWith('.')) continue;
 
           String mimeType = 'unknown';
-          if (!stat.type == FileSystemEntityType.directory) {
+          if (stat.type != FileSystemEntityType.directory) {
             mimeType = lookupMimeType(entity.path) ?? 'application/octet-stream';
           }
 
