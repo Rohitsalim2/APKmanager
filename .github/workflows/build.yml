@@ -24,16 +24,23 @@ jobs:
       - name: Generate Android project
         run: flutter create . --platforms=android
 
-      - name: Bump compileSdk to 36
+      - name: Force compileSdk 36 on EVERY gradle project (incl. plugins)
         run: |
-          set -e
-          for f in android/app/build.gradle android/app/build.gradle.kts; do
-            if [ -f "$f" ]; then
-              sed -i 's/flutter\.compileSdkVersion/36/g' "$f"
-              echo "=== $f ==="
-              grep -n "compileSdk" "$f" || true
-            fi
-          done
+          mkdir -p "$HOME/.gradle/init.d"
+          cat > "$HOME/.gradle/init.d/force-compilesdk.gradle" <<'EOF'
+          allprojects { p ->
+              p.afterEvaluate {
+                  def ext = p.extensions.findByName('android')
+                  if (ext != null) {
+                      try { ext.compileSdkVersion(36) } catch (Exception e) { }
+                      try { ext.compileSdk = 36 } catch (Exception e) { }
+                      println "[" + p.name + "] compileSdk => 36"
+                  }
+              }
+          }
+          EOF
+          echo "--- init script written ---"
+          cat "$HOME/.gradle/init.d/force-compilesdk.gradle"
 
       - name: Get dependencies
         run: flutter pub get
