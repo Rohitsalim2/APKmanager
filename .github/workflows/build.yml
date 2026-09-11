@@ -24,6 +24,17 @@ jobs:
       - name: Generate Android project
         run: flutter create . --platforms=android
 
+      - name: Bump compileSdk to 36
+        run: |
+          set -e
+          for f in android/app/build.gradle android/app/build.gradle.kts; do
+            if [ -f "$f" ]; then
+              sed -i 's/flutter\.compileSdkVersion/36/g' "$f"
+              echo "=== $f ==="
+              grep -n "compileSdk" "$f" || true
+            fi
+          done
+
       - name: Get dependencies
         run: flutter pub get
 
